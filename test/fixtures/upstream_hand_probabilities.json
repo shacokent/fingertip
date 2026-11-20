@@ -1,0 +1,42 @@
+{
+  "source": "https://huggingface.co/nngeek195/nail-segmentation-v1",
+  "source_image": "nail_test_001636.jpg",
+  "bundled_image": "assets/samples/hand.jpg",
+  "description": "Actual full-image ONNX inference output captured during checkpoint conversion validation, not a synthetic nail template. Upstream sample/training material, not an independent benchmark.",
+  "dtype": "float32",
+  "endianness": "little",
+  "shape": [
+    1,
+    1,
+    128,
+    128
+  ],
+  "image_size": [
+    640,
+    640
+  ],
+  "sha256": "d724e941fc0cdd4d98298ca5c06cf2860d4b12d8b8e5bab58b9afe5083a454d3",
+  "foreground_threshold": 0.5,
+  "raw_components_min_area_3": 7,
+  "expected_nails_after_cleanup": 5,
+  "weak_fabric_components": [
+    {
+      "bbox_mask_pixels": [
+        80,
+        11,
+        97,
+        20
+      ],
+      "mean_probability": 0.6287924194335938
+    },
+    {
+      "bbox_mask_pixels": [
+        75,
+        20,
+        79,
+        24
+      ],
+      "mean_probability": 0.5431589824812753
+    }
+  ]
+}

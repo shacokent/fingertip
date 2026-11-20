@@ -1,0 +1,5 @@
+MediaPipe Face Landmarker model bundle, Google.
+Android face detection and face mesh use the bundled fixed-version model.
+Corresponding component model cards and Apache-2.0 license are retained here.
+License: assets/models/MEDIAPIPE_LICENSE.txt.
+No model downloads occur at runtime.

@@ -1,0 +1,9 @@
+{
+  "repository": "https://huggingface.co/nngeek195/nail-segmentation-v1",
+  "revision": "c47cd209a4db2a1f8867cf0271bde627c3ddb11d",
+  "declaredLicense": "mit",
+  "checkpoint": "model/nail_segmentation_model-01.pt",
+  "checkpointSha256": "69b6a986b5fa67447fc64b508012894b582a4969664a579c5890902b1a3bc198",
+  "bundledSample": "scripts/Model Train Stage/dataset/images/nail_test_001636.jpg",
+  "localSample": "assets/samples/hand.jpg"
+}

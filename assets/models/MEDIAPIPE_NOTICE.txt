@@ -1,0 +1,17 @@
+MediaPipe Hand Landmarker (float16, model bundle version 1)
+Original publisher: Google / The MediaPipe Authors.
+The included hand_landmarker.task is redistributed without modification.
+
+Source:
+https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task
+
+Model documentation and license reference:
+https://developers.google.com/edge/mediapipe/solutions/vision/hand_landmarker
+https://storage.googleapis.com/mediapipe-assets/Model%20Card%20Hand%20Tracking%20%28Lite_Full%29%20with%20Fairness%20Oct%202021.pdf
+
+Apache License, Version 2.0. The upstream license is reproduced in
+MEDIAPIPE_LICENSE.txt. Upstream copyright and third-party notices are
+retained there. MediaPipe native runtimes are separate dependencies whose
+upstream notices are also distributed by their package managers.
+
+This model estimates hand landmarks. It does not identify nail boundaries.

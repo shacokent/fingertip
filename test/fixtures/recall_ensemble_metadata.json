@@ -1,0 +1,15 @@
+{
+  "source": "nngeek195/nail-segmentation-v1",
+  "sourceImage": "nail_test_001636.jpg",
+  "note": "Upstream sample, not independent accuracy validation. These arrays test numerical postprocessing/fusion only.",
+  "shape": [
+    1,
+    1,
+    128,
+    128
+  ],
+  "dtype": "float32 little-endian",
+  "rawRotation": "recall_rotated180_raw.f32 must be inverse-rotated before merge",
+  "method": "per-view threshold .38, mean .57, min area 3, max fraction .08; inverse rotation; maximum accepted probability; final same filter",
+  "expected": "recall_ensemble_expected.f32 is after per-view filtering/max, before final filter"
+}

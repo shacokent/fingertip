@@ -1,0 +1,7 @@
+Dataset source: “Nail Segmentation Dataset” on Kaggle — Muhammad Hammad (muhammadhammad261).
+
+URL: https://www.kaggle.com/datasets/muhammadhammad261/nail-segmentation-dataset
+
+License / Terms: CC0: Public Domain
+
+Usage note: Used for training and evaluating nail segmentation; possible bias due to camera quality, lighting, and hand demographics.

@@ -1,0 +1,314 @@
+{
+  "version": 2,
+  "date": "2026-11-04",
+  "model": {
+    "file": "assets/models/nail_segmentation.onnx",
+    "sha256": "39433656fbf47a921650e4e585530de80abd6f574fa822bbcd3dbc7abc11a039",
+    "weightsChanged": false
+  },
+  "evaluationScope": "Nine upstream repository example/training photographs and their supplied masks. Parameters were explored on these same examples, so this is an engineering comparison, not an independent accuracy estimate or production guarantee.",
+  "preprocessing": {
+    "experimentImplementation": "Python PIL Image.Resampling.BOX, whole RGB frame stretched to 128x128; normalization channel/127.5-1; float32 NCHW",
+    "appImplementation": "Dart package:image Interpolation.average, after EXIF correction and working-image longest-edge cap of 1600",
+    "relationship": "PIL BOX is a practical approximation to Dart area averaging, not a claim of pixel-identical preprocessing. The upstream export parity and earlier reference validation used PIL bilinear, retained separately.",
+    "output": "Model probabilities already contain sigmoid; no second sigmoid."
+  },
+  "runtimeInference": {
+    "rotationsDegrees": [
+      0,
+      180
+    ],
+    "rotationStage": "Rotate the prepared 128x128 RGB tensor, not the whole high-resolution image.",
+    "input180IndexMapping": "Within each NCHW color plane, rotated[i] = original[16383-i].",
+    "inverseOutput180IndexMapping": "aligned[i] = rawRotatedOutput[16383-i].",
+    "perViewFilter": {
+      "probabilityThreshold": 0.38,
+      "minimumComponentMeanProbability": 0.57,
+      "minimumComponentAreaPixels": 3,
+      "maximumComponentAreaFraction": 0.08,
+      "connectivity": 8
+    },
+    "fusion": "Set rejected components to zero in each view, inverse-transform the rotated output, then take the maximum retained probability per pixel.",
+    "finalFilter": "Apply the same component filtering to the fused map."
+  },
+  "postprocessingChanges": {
+    "handLandmarks": "Used only for best-effort finger labels and direction; unmatched or duplicate associations do not discard model candidates.",
+    "maximumOutputRegions": 12,
+    "fixedPoseRequired": false,
+    "limitation": "No missing nail is synthesized from a hand template. Manual add/correction remains necessary."
+  },
+  "recommendedMeasurements": {
+    "note": "Upstream images, not independent validation. Mask coverage is 20% GT instance pixels; not commercial accuracy.",
+    "method": "0+180 full-frame; per-view threshold .38, component mean .57, min3, max8%; inverse-transform then max accepted probability, same postfilter",
+    "summary": {
+      "dice": 0.690245413117085,
+      "recall": 0.7111111111111111,
+      "fp": 0.0,
+      "count": 4.333333333333333
+    },
+    "negativePixels": {
+      "black": 0,
+      "white": 0,
+      "gray": 0,
+      "noise": 0
+    },
+    "images": [
+      {
+        "image": "nail_test_001613.jpg",
+        "dice": 0.8083769633507853,
+        "recall": 0.8,
+        "fp": 0,
+        "count": 4
+      },
+      {
+        "image": "nail_test_001617.jpg",
+        "dice": 0.8714448236632537,
+        "recall": 0.8,
+        "fp": 0,
+        "count": 4
+      },
+      {
+        "image": "nail_test_001632.jpg",
+        "dice": 0.4364820846905538,
+        "recall": 0.6,
+        "fp": 0,
+        "count": 3
+      },
+      {
+        "image": "nail_test_001636.jpg",
+        "dice": 0.9359302921578677,
+        "recall": 1.0,
+        "fp": 0,
+        "count": 5
+      },
+      {
+        "image": "nail_test_001643.jpg",
+        "dice": 0.7558411214953271,
+        "recall": 1.0,
+        "fp": 0,
+        "count": 10
+      },
+      {
+        "image": "nail_test_001647.jpg",
+        "dice": 0.5114942528735632,
+        "recall": 0.4,
+        "fp": 0,
+        "count": 2
+      },
+      {
+        "image": "nail_test_001649.jpg",
+        "dice": 0.8050314465408805,
+        "recall": 0.8,
+        "fp": 0,
+        "count": 4
+      },
+      {
+        "image": "nail_test_001652.jpg",
+        "dice": 0.4840764331210191,
+        "recall": 0.25,
+        "fp": 0,
+        "count": 1
+      },
+      {
+        "image": "nail_test_001657.jpg",
+        "dice": 0.6035313001605136,
+        "recall": 0.75,
+        "fp": 0,
+        "count": 6
+      }
+    ]
+  },
+  "baselineDefinition": {
+    "rotationsDegrees": [
+      0
+    ],
+    "probabilityThreshold": 0.5,
+    "minimumComponentMeanProbability": 0.65,
+    "minimumComponentAreaPixels": 6,
+    "maximumComponentAreaFraction": 0.08
+  },
+  "metrics": {
+    "dice": "Pixel Dice against supplied GT resized to 128x128 with nearest sampling.",
+    "objectRecall": "Fraction of GT connected-component nails with at least 20% of their GT pixels covered. This is a coverage heuristic, not IoU-based detection AP.",
+    "falseComponents": "Predicted connected components with fewer than 20% of their own pixels intersecting any GT nail.",
+    "components": "Metrics cover semantic masks before the optional per-photo maximum of 12 displayed regions; hand association is not measured here."
+  },
+  "rotationExploration": {
+    "summary": {
+      "baseline": {
+        "dice": 0.569978311235394,
+        "recall": 0.5777777777777778,
+        "fp": 0.0,
+        "count": 3.4444444444444446
+      },
+      "lower": {
+        "dice": 0.6255921270369098,
+        "recall": 0.6361111111111112,
+        "fp": 0.1111111111111111,
+        "count": 3.888888888888889
+      },
+      "rotation_1": {
+        "dice": 0.6139819985775432,
+        "recall": 0.6888888888888889,
+        "fp": 0.1111111111111111,
+        "count": 4.222222222222222
+      },
+      "rotation_2": {
+        "dice": 0.5950827266840178,
+        "recall": 0.6277777777777778,
+        "fp": 0.0,
+        "count": 3.888888888888889
+      },
+      "rotation_3": {
+        "dice": 0.6553413980150925,
+        "recall": 0.6611111111111111,
+        "fp": 0.1111111111111111,
+        "count": 4.111111111111111
+      },
+      "rot_max": {
+        "dice": 0.6939950353392024,
+        "recall": 0.7194444444444446,
+        "fp": 0.2222222222222222,
+        "count": 4.444444444444445
+      },
+      "rot_mean": {
+        "dice": 0.6526996539032939,
+        "recall": 0.6527777777777778,
+        "fp": 0.0,
+        "count": 4.0
+      },
+      "rot_union": {
+        "dice": 0.6916772318580579,
+        "recall": 0.7194444444444446,
+        "fp": 0.2222222222222222,
+        "count": 4.444444444444445
+      },
+      "rot_lower_union": {
+        "dice": 0.6882684381590058,
+        "recall": 0.7472222222222222,
+        "fp": 0.3333333333333333,
+        "count": 4.777777777777778
+      },
+      "rot_two_union": {
+        "dice": 0.6485584886739612,
+        "recall": 0.6388888888888888,
+        "fp": 0.0,
+        "count": 3.888888888888889
+      },
+      "rot_two_lower_union": {
+        "dice": 0.6878358264829276,
+        "recall": 0.7111111111111111,
+        "fp": 0.1111111111111111,
+        "count": 4.444444444444445
+      }
+    },
+    "negativePixels": {
+      "black": {
+        "single_best_grid": 0,
+        "rot_union": 0,
+        "rot_lower_union": 0,
+        "rot_two_lower_union": 0
+      },
+      "white": {
+        "single_best_grid": 0,
+        "rot_union": 0,
+        "rot_lower_union": 0,
+        "rot_two_lower_union": 0
+      },
+      "gray": {
+        "single_best_grid": 0,
+        "rot_union": 0,
+        "rot_lower_union": 0,
+        "rot_two_lower_union": 0
+      },
+      "noise": {
+        "single_best_grid": 0,
+        "rot_union": 0,
+        "rot_lower_union": 0,
+        "rot_two_lower_union": 0
+      }
+    },
+    "conclusion": "Two opposite full-frame views were selected over default four-way union because four-way relaxed union increased false components. Four-way inference is not the default runtime."
+  },
+  "rejectedTilingExploration": {
+    "summary": {
+      "baseline": {
+        "dice": 0.5675296955191071,
+        "objectRecall": 0.5777777777777778,
+        "predictedCount": 3.4444444444444446,
+        "falseComponents": 0.0
+      },
+      "lower_filters": {
+        "dice": 0.6218582433708764,
+        "objectRecall": 0.6361111111111112,
+        "predictedCount": 3.888888888888889,
+        "falseComponents": 0.1111111111111111
+      },
+      "tile65_avg": {
+        "dice": 0.4542659205121537,
+        "objectRecall": 0.5194444444444444,
+        "predictedCount": 3.888888888888889,
+        "falseComponents": 0.5555555555555556
+      },
+      "tile65_max": {
+        "dice": 0.5277080365002941,
+        "objectRecall": 0.6416666666666666,
+        "predictedCount": 4.333333333333333,
+        "falseComponents": 0.5555555555555556
+      },
+      "tile80_avg": {
+        "dice": 0.5347694597956569,
+        "objectRecall": 0.5249999999999999,
+        "predictedCount": 3.0,
+        "falseComponents": 0.0
+      },
+      "base65_blend": {
+        "dice": 0.5864953233566249,
+        "objectRecall": 0.5916666666666667,
+        "predictedCount": 3.5555555555555554,
+        "falseComponents": 0.0
+      },
+      "base65_union": {
+        "dice": 0.5808074853207609,
+        "objectRecall": 0.7111111111111111,
+        "predictedCount": 4.777777777777778,
+        "falseComponents": 0.4444444444444444
+      },
+      "base80_union": {
+        "dice": 0.6203263413195514,
+        "objectRecall": 0.6277777777777778,
+        "predictedCount": 3.888888888888889,
+        "falseComponents": 0.0
+      }
+    },
+    "negativePixels": {
+      "black": {
+        "base": 0,
+        "lower_filters": 0,
+        "base80_union": 0
+      },
+      "white": {
+        "base": 0,
+        "lower_filters": 0,
+        "base80_union": 0
+      },
+      "gray": {
+        "base": 0,
+        "lower_filters": 0,
+        "base80_union": 2547
+      },
+      "noise": {
+        "base": 0,
+        "lower_filters": 0,
+        "base80_union": 0
+      }
+    },
+    "conclusion": "Overlapping 2x2 crops changed the model input distribution. They added background components; an 80%-crop union produced false foreground on a uniform gray image. Tiling is not enabled in the runtime."
+  },
+  "limitations": [
+    "Short, bare, side-facing, occluded or tiny nails still get missed. This update does not make segmentation complete.",
+    "Plain black/white/gray and seeded noise inputs are a small sanity check, not a comprehensive negative set.",
+    "The measured gain cannot be reported as accuracy on real users or as a calibrated confidence score.",
+    "Tensor dimensions and model weights are unchanged."
+  ]
+}
